@@ -25,4 +25,9 @@ endif()
 
 pico_sdk_init()
 
+# Force ARMv8-M Mainline (Cortex-M33) flags for RP2350 ARM builds to avoid
+# falling back to software spinlocks or unsupported instructions.
+add_compile_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
+add_link_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
+
 add_subdirectory(examples/baremetal)

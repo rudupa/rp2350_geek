@@ -4,6 +4,9 @@ add_executable(rp2350_geek_baremetal
     src/main.c
 )
 
+# Ensure the ELF file has a .elf suffix so picotool can infer the format.
+set_property(TARGET rp2350_geek_baremetal PROPERTY SUFFIX ".elf")
+
 target_include_directories(rp2350_geek_baremetal PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(rp2350_geek_baremetal
