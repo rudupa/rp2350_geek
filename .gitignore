@@ -1,0 +1,28 @@
+# Build artifacts
+build/
+out/
+
+# CMake / Ninja
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+*.ninja
+*.ninja_deps
+*.ninja_log
+
+# SDK fetch/deps
+_deps/
+
+# Binaries
+*.elf
+*.bin
+*.hex
+*.uf2
+*.map
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
