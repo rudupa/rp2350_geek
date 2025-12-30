@@ -417,7 +417,7 @@ static void render_gradient_page(void) {
     }
     fb_draw_rect(12, 12, LCD_WIDTH - 24, LCD_HEIGHT - 24, rgb565(0, 0, 0));
     fb_draw_rect(14, 14, LCD_WIDTH - 28, LCD_HEIGHT - 28, rgb565(255, 255, 255));
-    fb_draw_text(22, 22, "Gradient + frame", rgb565(0, 0, 0), rgb565(255, 255, 255));
+    fb_draw_text_2x(20, 18, "Gradient + frame", rgb565(0, 0, 0), rgb565(255, 255, 255));
 }
 
 static const uint8_t heart_icon[16 * 16] = {
@@ -448,7 +448,7 @@ static const uint16_t heart_palette[4] = {
 
 static void render_icon_page(void) {
     fb_clear(rgb565(12, 12, 18));
-    fb_draw_text(12, 12, "Icon demo", rgb565(220, 220, 255), rgb565(12, 12, 18));
+    fb_draw_text_2x(12, 12, "Icon demo", rgb565(220, 220, 255), rgb565(12, 12, 18));
     fb_draw_icon16((LCD_WIDTH - 16) / 2, (LCD_HEIGHT - 16) / 2, heart_icon, heart_palette);
 }
 
@@ -505,11 +505,11 @@ static const uint8_t gif_frames[3][12 * 12] = {
 
 static void render_gif_page(void) {
     fb_clear(rgb565(0, 0, 0));
-    fb_draw_text(8, 10, "GIF-ish pulse", rgb565(120, 220, 255), rgb565(0, 0, 0));
+    fb_draw_text_2x(8, 8, "GIF-ish pulse", rgb565(120, 220, 255), rgb565(0, 0, 0));
     int origin_x = (LCD_WIDTH - 12) / 2;
     int origin_y = (LCD_HEIGHT - 12) / 2;
     for (int f = 0; f < 3; ++f) {
-        fb_draw_rect(0, 30, LCD_WIDTH, LCD_HEIGHT - 30, rgb565(0, 0, 0));
+        fb_draw_rect(0, 32, LCD_WIDTH, LCD_HEIGHT - 32, rgb565(0, 0, 0));
         for (int iy = 0; iy < 12; ++iy) {
             for (int ix = 0; ix < 12; ++ix) {
                 uint8_t idx = gif_frames[f][iy * 12 + ix];
