@@ -2,6 +2,7 @@
 $config = @{
     PICO_SDK_PATH      = "C:/raspberrypi/pico-sdk"
     TOOLCHAIN_DIR      = "C:/ArmGNU/13.2/arm-gnu-toolchain-13.2.Rel1-mingw-w64-i686-arm-none-eabi"
+    RISCV_TOOLCHAIN_DIR = "C:/tools/xpack-riscv-none-elf-gcc-15.2.0-1"  # RISC-V GCC root (bin contains riscv*-gcc)
     PYTHON_EXECUTABLE  = "C:/Users/rites/anaconda3/python.exe"
     CMAKE_GENERATOR    = "Ninja"
     CMAKE_SYSTEM_NAME  = "Generic"

@@ -3,9 +3,9 @@
 Each script expects `scripts/config.ps1` to be configured (toolchain paths, target names, etc.). Paths are workspace-relative.
 
 ## scripts/build.ps1
-- **What it does**: Configures CMake and builds the configured target (default `rp2350_geek_baremetal`) using the ARM toolchain; optionally cleans first.
-- **Key args**: `-Clean` removes the build dir before configure+build.
-- **Example**: `pwsh -NoProfile -File scripts/build.ps1` or `pwsh -NoProfile -File scripts/build.ps1 -Clean`.
+- **What it does**: Configures CMake and builds the configured target (default `rp2350_geek_baremetal`) using the selected platform/toolchain; optionally cleans first.
+- **Key args**: `-Clean` removes the build dir before configure+build. `-Platform rp2350|rp2350-riscv` selects ARM (default) vs RISC-V Hazard3 (requires a RISC-V GCC in `config.RISCV_TOOLCHAIN_DIR` or on `PATH`).
+- **Example**: `pwsh -NoProfile -File scripts/build.ps1` or `pwsh -NoProfile -File scripts/build.ps1 -Clean -Platform rp2350-riscv`.
 - **Rationale**: One-step configure+build that ensures the correct toolchain, generator, and PICO settings are applied without retyping long CMake flags.
 
 ## scripts/clean.ps1
@@ -38,6 +38,6 @@ Each script expects `scripts/config.ps1` to be configured (toolchain paths, targ
 
 ## scripts/build_and_flash.ps1
 - **What it does**: Runs `build.ps1` (optionally clean) and then flashes via `flash_via_serial_bootsel.ps1`.
-- **Key args**: `-Clean` (passes through to build), `-ComPort` (default `COM17`), `-Baud` (default `9600`), optional `-PicotoolPath` and `-Uf2Path` to override defaults.
-- **Example**: `pwsh -NoProfile -File scripts/build_and_flash.ps1 -ComPort COM17 -Baud 9600 -PicotoolPath build/picotool-usb-vs/Release/picotool.exe`.
+- **Key args**: `-Clean` (passes through to build), `-Platform rp2350|rp2350-riscv`, `-ComPort` (default `COM17`), `-Baud` (default `9600`), optional `-PicotoolPath` and `-Uf2Path` to override defaults.
+- **Example**: `pwsh -NoProfile -File scripts/build_and_flash.ps1 -Platform rp2350-riscv -ComPort COM17 -Baud 9600 -PicotoolPath build/picotool-usb-vs/Release/picotool.exe`.
 - **Rationale**: One-step build-and-flash loop for the common serial BOOTSEL + picotool workflow.
