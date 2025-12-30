@@ -48,7 +48,7 @@ LCD pin defaults (SPI1): CS=9, DC=8, RST=12, BL=13, SCK=10, MOSI=11, with ST7789
 	- The supplied `zephyr/boards/rpi_pico2.overlay` binds `led0` to GPIO25; adjust or remove if your board file already defines an LED alias.
 2) Flash: `west flash` (or copy the generated `.uf2` from `zephyr/build/zephyr/` to the BOOTSEL drive), or use the PowerShell helper: `pwsh -File scripts/build_and_flash_zephyr.ps1 -ComPort <COM> -Board rpi_pico2/rp2350a/m33`.
 
-Runtime: heartbeat tasks log every 5 seconds; LED/backlight pin is held high (no blink). Console is UART0 (GP0/GP1, 115200 8N1); the board’s USB does **not** enumerate a CDC ACM port in this Zephyr demo, so use a USB-UART adapter on those pins to read logs. LCD drawing is not yet implemented in the Zephyr app; the bare-metal app shows the LCD demo.
+Runtime: heartbeat tasks log every 5 seconds; LED/backlight pin is held high (no blink). Console is UART0 (GP0/GP1, 115200 8N1); the board’s USB does **not** enumerate a CDC ACM port in this Zephyr demo, so use a USB-UART adapter on those pins to read logs. LCD now runs the four-page ST7789 loop (text, gradient, icon, pulse GIF) via bit-banged SPI on SPI1 pins (SCK=10, MOSI=11, CS=9, DC=8, RST=12, BL=13).
 
 ## Hardware Feature Exercise
 - LED: heartbeat blinks on both demos
