@@ -42,13 +42,13 @@ What it does (every 5 seconds): toggles the LED, logs over USB CDC & UART, scans
 
 LCD pin defaults (SPI1): CS=9, DC=8, RST=12, BL=13, SCK=10, MOSI=11, with ST7789-style offsets (X=52, Y=40) and 16-bit color (BGR). Override via CMake cache definitions if your wiring or panel orientation differs (e.g., `-DRP2350_GEEK_LCD_SPI_CS_PIN=...`).
 
-## Build and Flash — Zephyr RTOS Demo
+## Build and Flash — Zephyr RTOS Demo (single-core)
 1) From the repo root, build (ARM on rpi_pico2): `west build -b rpi_pico2 zephyr`
-	- If your Zephyr tree provides a RISC-V board target, use it (for example `-b rpi_pico2_riscv` if available in your fork).
+	- SMP is not supported on this board; `CONFIG_SMP` is disabled.
 	- The supplied `zephyr/boards/rpi_pico2.overlay` binds `led0` to GPIO25; adjust or remove if your board file already defines an LED alias.
-2) Flash: `west flash` (or copy the generated `.uf2` from `zephyr/build/zephyr/` to the BOOTSEL drive).
+2) Flash: `west flash` (or copy the generated `.uf2` from `zephyr/build/zephyr/` to the BOOTSEL drive), or use the PowerShell helper: `pwsh -File scripts/build_and_flash_zephyr.ps1 -ComPort <COM> -Board rpi_pico2/rp2350a/m33`.
 
-What it does (every 5 seconds): blinks the LED alias `led0` and logs the heartbeat plus detected architecture (`arm` vs `riscv`). Extend with Zephyr drivers (I2C/SPI/UART/LCD) as needed.
+Runtime: heartbeat tasks log every 5 seconds; LED/backlight pin is held high (no blink). Console is UART0 (GP0/GP1, 115200 8N1); the board’s USB does **not** enumerate a CDC ACM port in this Zephyr demo, so use a USB-UART adapter on those pins to read logs. LCD drawing is not yet implemented in the Zephyr app; the bare-metal app shows the LCD demo.
 
 ## Hardware Feature Exercise
 - LED: heartbeat blinks on both demos
