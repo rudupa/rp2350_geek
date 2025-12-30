@@ -11,7 +11,7 @@ CMake/Ninja reference workspace for building `.uf2` images for the Waveshare RP2
 
 ## Repo Layout
 - CMakeLists.txt — root build that targets Pico SDK examples
-- examples/baremetal — Pico SDK heartbeat demo (LED, USB/UART log, I2C scan, SPI loopback, ADC)
+- examples/baremetal — Pico SDK heartbeat demo (LED, USB/UART log, I2C scan, SPI loopback, ADC) plus a 1.14" ST7789 LCD showcase that rotates text, gradient, icon, and a simple animated pulse on every heartbeat
 - zephyr — Zephyr heartbeat demo with LED logging
 - docs/hardware.md — condensed hardware and pin notes
 
@@ -35,7 +35,11 @@ CMake/Ninja reference workspace for building `.uf2` images for the Waveshare RP2
 3) Output: `build/baremetal/rp2350_geek_baremetal.uf2`
 4) Flash: hold BOOTSEL, plug USB-C, release, copy the `.uf2` file; or use OpenOCD/picoprobe (see docs/hardware.md)
 
-What it does (every 5 seconds): toggles the LED, logs over USB CDC & UART, scans I2C0 (400 kHz), runs an SPI0 loopback (MOSI↔MISO), and reads an ADC channel. Update pin defs in `examples/baremetal/board_config.h` if your wiring differs.
+Picotool (USB-enabled) is prebuilt at `build/baremetal/_deps/picotool/picotool.exe` (copied from `build/picotool-usb-vs/Release/picotool.exe`). The script `scripts/flash_via_serial_bootsel.ps1` will use it by default and can trigger BOOTSEL over the running firmware (send `BOOTSEL` over COM then force reboot if needed) and load the UF2 via USB ROM. Use `-ComPort <port>` and optional `-Baud`, or pass `-PicotoolPath` to override.
+
+What it does (every 5 seconds): toggles the LED, logs over USB CDC & UART, scans I2C0 (400 kHz), runs an SPI0 loopback (MOSI↔MISO), reads an ADC channel, and drives the 1.14" LCD (default SPI1 pins) through a four-page cycle (text, gradient, 16x16 heart icon, small animated pulse). Update pin defs in `examples/baremetal/board_config.h` if your wiring differs.
+
+LCD pin defaults (SPI1): CS=9, DC=8, RST=12, BL=13, SCK=10, MOSI=11, with ST7789-style offsets (X=52, Y=40) and 16-bit color (BGR). Override via CMake cache definitions if your wiring or panel orientation differs (e.g., `-DRP2350_GEEK_LCD_SPI_CS_PIN=...`).
 
 ## Build and Flash — Zephyr RTOS Demo
 1) From the repo root, build (ARM on rpi_pico2): `west build -b rpi_pico2 zephyr`

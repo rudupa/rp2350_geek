@@ -49,3 +49,33 @@
 #ifndef RP2350_GEEK_ADC_PIN
 #define RP2350_GEEK_ADC_PIN 26
 #endif
+
+// On-board 1.14" ST7789-class LCD (SPI1 on the RP2350-GEEK reference wiring).
+// Override these if your wiring differs.
+#ifndef RP2350_GEEK_LCD_SPI_PORT
+#define RP2350_GEEK_LCD_SPI_PORT spi1
+#endif
+
+#ifndef RP2350_GEEK_LCD_SPI_SCK_PIN
+#define RP2350_GEEK_LCD_SPI_SCK_PIN 10
+#endif
+
+#ifndef RP2350_GEEK_LCD_SPI_MOSI_PIN
+#define RP2350_GEEK_LCD_SPI_MOSI_PIN 11
+#endif
+
+#ifndef RP2350_GEEK_LCD_SPI_CS_PIN
+#define RP2350_GEEK_LCD_SPI_CS_PIN 9
+#endif
+
+#ifndef RP2350_GEEK_LCD_DC_PIN
+#define RP2350_GEEK_LCD_DC_PIN 8
+#endif
+
+#ifndef RP2350_GEEK_LCD_RST_PIN
+#define RP2350_GEEK_LCD_RST_PIN 12
+#endif
+
+#ifndef RP2350_GEEK_LCD_BL_PIN
+#define RP2350_GEEK_LCD_BL_PIN 13
+#endif
