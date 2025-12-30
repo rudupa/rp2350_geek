@@ -23,11 +23,24 @@ if(NOT DEFINED PICO_PLATFORM)
     set(PICO_PLATFORM "rp2350" CACHE STRING "Target platform for RP2350 (rp2350 or rp2350-riscv)")
 endif()
 
+# Hazard3 builds should stick with hardware spinlocks (software spinlocks are not provided in the SDK for this platform).
+if(PICO_PLATFORM STREQUAL "rp2350-riscv")
+    set(PICO_USE_SW_SPIN_LOCKS 0 CACHE BOOL "Use hardware spinlocks on rp2350-riscv" FORCE)
+endif()
+
 pico_sdk_init()
 
-# Force ARMv8-M Mainline (Cortex-M33) flags for RP2350 ARM builds to avoid
-# falling back to software spinlocks or unsupported instructions.
-add_compile_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
-add_link_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
+# Force ARMv8-M Mainline (Cortex-M33) flags only on ARM builds; let RISC-V use
+# its default toolchain flags.
+if(PICO_PLATFORM STREQUAL "rp2350")
+    add_compile_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
+    add_link_options(-mcpu=cortex-m33 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16)
+elseif(PICO_PLATFORM STREQUAL "rp2350-riscv")
+    # Hazard3 core uses compressed + bitmanip instructions; ensure arch/abi for C/ASM (boot2 uses Zbs).
+    add_compile_options(-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32)
+    add_link_options(-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32)
+    set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32")
+    add_compile_definitions(PICO_USE_SW_SPIN_LOCKS=0)
+endif()
 
 add_subdirectory(examples/baremetal)

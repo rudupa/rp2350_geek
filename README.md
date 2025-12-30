@@ -25,11 +25,12 @@ CMake/Ninja reference workspace for building `.uf2` images for the Waveshare RP2
 ## Selecting ARM vs RISC-V
 - ARM (default): configure with `-DPICO_PLATFORM=rp2350`
 - RISC-V: configure with `-DPICO_PLATFORM=rp2350-riscv` and set `PICO_TOOLCHAIN_PATH` to your RISC-V toolchain (see pico-sdk RISC-V quick start)
+- RISC-V specifics: Hazard3 needs `zifencei` for `fence.i` and hardware spinlocks (software spinlocks are not provided). The build scripts pass `-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32` and set `PICO_USE_SW_SPIN_LOCKS=0`; ensure your toolchain supports that arch string (xPack GCC 15.2 works).
 
 ## Build and Flash — Bare-metal (Pico SDK)
 1) Configure (ARM example) using a clean build dir:
-	- `cmake -S . -B build/baremetal -G Ninja -DPICO_SDK_PATH=<path-to-pico-sdk> -DPICO_PLATFORM=rp2350 -DPICO_BOARD=pico2`
-	- For RISC-V: `-DPICO_PLATFORM=rp2350-riscv` (requires RISC-V toolchain)
+	- ARM: `cmake -S . -B build/baremetal -G Ninja -DPICO_SDK_PATH=<path-to-pico-sdk> -DPICO_PLATFORM=rp2350 -DPICO_BOARD=pico2`
+	- RISC-V: `cmake -S . -B build/baremetal -G Ninja -DPICO_SDK_PATH=<path-to-pico-sdk> -DPICO_PLATFORM=rp2350-riscv -DPICO_BOARD=pico2 -DCMAKE_C_FLAGS="-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32" -DCMAKE_CXX_FLAGS="-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32" -DCMAKE_ASM_FLAGS="-march=rv32imc_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"`
 	- Override pins if needed, e.g., `-DRP2350_GEEK_I2C_SDA_PIN=2 -DRP2350_GEEK_I2C_SCL_PIN=3`
 2) Build: `cmake --build build/baremetal -t rp2350_geek_baremetal`
 3) Output: `build/baremetal/rp2350_geek_baremetal.uf2`
